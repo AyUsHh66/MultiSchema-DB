@@ -45,9 +45,11 @@ cd MultiSchemaCustomerManager
 ```
 2️⃣ Configure Database Connection
 Modify the appsettings.json file with your SQL Server credentials:
+```sh
 "ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER;Database=MultiSchemaDB;Integrated Security=true;"
 }
+```
 3️⃣ Run Database Migrations (If using EF Core)
 ```sh
 dotnet ef database update
