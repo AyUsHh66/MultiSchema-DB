@@ -1,0 +1,100 @@
+﻿@page
+@model MultiSchemaDB_Project.Pages.IndexModel
+@{
+    ViewData["Title"] = "Customer Managements";
+}
+
+<h1>Customer Management</h1>
+<form method="get">
+    <label for="schema">Select Schema:</label>
+    <select id="schema" name="schema" onchange="this.form.submit()">
+        <option value="Schema1" selected="@(Model.SelectedSchema == "Schema1")">Schema 1</option>
+        <option value="Schema2" selected="@(Model.SelectedSchema == "Schema2")">Schema 2</option>
+        <option value="Schema3" selected="@(Model.SelectedSchema == "Schema3")">Schema 3</option>
+    </select>
+
+    <label for="searchQuery">Search:</label>
+    <input type="text" id="searchQuery" name="searchQuery" value="@Model.SearchQuery" />
+    <button type="submit">Search</button>
+</form>
+
+@if (Model.Customers != null && Model.Customers.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @if (Model.SelectedSchema == "Schema1")
+                {
+                    <th>Customer ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                }
+                else if (Model.SelectedSchema == "Schema2")
+                {
+                    <th>Customer ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                }
+                else if (Model.SelectedSchema == "Schema3")
+                {
+                    <th>Customer ID</th>
+                    <th>Company Name</th>
+                    <th>Contact Person</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                }
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    @if (Model.SelectedSchema == "Schema1")
+                    {
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.CustomerID)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.FirstName)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.LastName)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.Email)</td>
+                    }
+                    else if (Model.SelectedSchema == "Schema2")
+                    {
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.CustomerID)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.FullName)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.Email)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.Phone)</td>
+                    }
+                    else if (Model.SelectedSchema == "Schema3")
+                    {
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.CustomerID)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.CompanyName)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.ContactPerson)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.Email)</td>
+                        <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.Address)</td>
+                    }
+                    <td>
+                        <!-- Edit Button -->
+                        <a asp-page="/Edit" asp-route-schema="@Model.SelectedSchema" asp-route-id="@((customer as dynamic)?.CustomerID)" class="btn btn-primary">
+    <i class="fas fa-edit"></i> Edit
+</a>
+                        <!-- Delete Button -->
+                       <form asp-page="/Delete" asp-route-schema="@Model.SelectedSchema" asp-route-id="@((customer as dynamic)?.CustomerID)" method="post" style="display:inline;">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">
+        <i class="fas fa-trash"></i> Delete
+    </button>
+</form>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    <a asp-page="/Create" asp-route-schema="@Model.SelectedSchema" class="btn btn-success">
+    <i class="fas fa-plus"></i> Create New
+</a>
+}
+else
+{
+    <p>No customers found for the selected schema.</p>
+}

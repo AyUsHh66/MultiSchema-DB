@@ -1,0 +1,126 @@
+@page
+@model MultiSchemaDB_Project.Pages.IndexModel
+@{
+    ViewData["Title"] = "Customer Management";
+}
+
+<!-- Hero Section -->
+<div class="container mt-5">
+    <div class="text-center mb-5 p-5 bg-light rounded shadow-sm">
+        <h1 class="display-4 fw-bold text-primary">Welcome to the Customer Management Portal</h1>
+        <p class="lead text-secondary">Efficiently manage customer data across multiple schemas with ease.</p>
+        <a asp-page="/Create" asp-route-schema="Schema1" class="btn btn-primary btn-lg mt-3">
+            <i class="bi bi-plus-circle"></i> Get Started
+        </a>
+    </div>
+
+    <!-- Search and Schema Selection Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <form method="get" class="d-flex align-items-center p-4 bg-white shadow rounded">
+                <label for="schema" class="me-3 fw-bold text-secondary">Select Schema:</label>
+                <select id="schema" name="schema" class="form-select me-3" onchange="this.form.submit()">
+                    <option value="Schema1" @(Model.SelectedSchema == "Schema1" ? "selected" : "")>Schema 1</option>
+                    <option value="Schema2" @(Model.SelectedSchema == "Schema2" ? "selected" : "")>Schema 2</option>
+                    <option value="Schema3" @(Model.SelectedSchema == "Schema3" ? "selected" : "")>Schema 3</option>
+                </select>
+
+                <input 
+                    type="text" 
+                    id="searchQuery" 
+                    name="searchQuery" 
+                    value="@Model.SearchQuery" 
+                    class="form-control me-3" 
+                    placeholder="Search by name, email, etc."
+                />
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    @if (Model.Customers != null && Model.Customers.Any())
+    {
+        <div class="table-responsive shadow-sm">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-primary text-center">
+                    <tr>
+                        @if (Model.SelectedSchema == "Schema1")
+                        {
+                            <th>Customer ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        }
+                        else if (Model.SelectedSchema == "Schema2")
+                        {
+                            <th>Customer ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                        }
+                        else if (Model.SelectedSchema == "Schema3")
+                        {
+                            <th>Customer ID</th>
+                            <th>Company Name</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                        }
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customer in Model.Customers)
+                    {
+                        <tr>
+                            @if (Model.SelectedSchema == "Schema1")
+                            {
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.CustomerID)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.FirstName)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.LastName)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema1Customer)?.Email)</td>
+                            }
+                            else if (Model.SelectedSchema == "Schema2")
+                            {
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.CustomerID)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.FullName)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.Email)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema2Customer)?.Phone)</td>
+                            }
+                            else if (Model.SelectedSchema == "Schema3")
+                            {
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.CustomerID)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.CompanyName)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.ContactPerson)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.Email)</td>
+                                <td>@((customer as MultiSchemaDB_Project.Models.Schema3Customer)?.Address)</td>
+                            }
+                            <td class="text-center">
+                                <a asp-page="/Edit"
+                                   asp-route-schema="@Model.SelectedSchema"
+                                   asp-route-id="@((customer as dynamic)?.CustomerID)" 
+                                   class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <form asp-page="/Delete" asp-route-schema="@Model.SelectedSchema" asp-route-id="@Model.GetCustomerId(customer)" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            No customers found for the selected schema.
+        </div>
+    }
+</div>

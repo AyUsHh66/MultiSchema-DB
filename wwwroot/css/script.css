@@ -1,0 +1,23 @@
+function loadData() {
+    const schema = document.getElementById("schemaDropdown").value;
+    const searchBar = document.getElementById("searchBar");
+    if (schema) {
+        searchBar.style.display = "block";
+        // Fetch and populate data based on selected schema
+        fetchData(schema);
+    } else {
+        searchBar.style.display = "none";
+        document.getElementById("dataTable").innerHTML = "";
+    }
+}
+
+function fetchData(schema) {
+    // Call your API to load data for the selected schema
+    console.log("Loading data for:", schema);
+}
+
+function search() {
+    const query = document.getElementById("searchInput").value;
+    console.log("Search query:", query);
+    // Implement the search functionality here
+}

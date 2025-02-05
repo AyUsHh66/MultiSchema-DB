@@ -1,0 +1,69 @@
+@page "{schema}"
+@model MultiSchemaDB_Project.Pages.CreateModel
+@{
+    ViewData["Title"] = "Create Customer";
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h3>Create Customer</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                @if (Model.Schema == "Schema1")
+                {
+                    <div class="mb-3">
+                        <label for="FirstName" class="form-label">First Name</label>
+                        <input type="text" id="FirstName" name="FirstName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="LastName" class="form-label">Last Name</label>
+                        <input type="text" id="LastName" name="LastName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" id="Email" name="Email" class="form-control" required />
+                    </div>
+                }
+                else if (Model.Schema == "Schema2")
+                {
+                    <div class="mb-3">
+                        <label for="FullName" class="form-label">Full Name</label>
+                        <input type="text" id="FullName" name="FullName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" id="Email" name="Email" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Phone" class="form-label">Phone</label>
+                        <input type="text" id="Phone" name="Phone" class="form-control" required />
+                    </div>
+                }
+                else if (Model.Schema == "Schema3")
+                {
+                    <div class="mb-3">
+                        <label for="CompanyName" class="form-label">Company Name</label>
+                        <input type="text" id="CompanyName" name="CompanyName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ContactPerson" class="form-label">Contact Person</label>
+                        <input type="text" id="ContactPerson" name="ContactPerson" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" id="Email" name="Email" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Address" class="form-label">Address</label>
+                        <input type="text" id="Address" name="Address" class="form-control" required />
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-page="/Index" asp-route-schema="@Model.Schema" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

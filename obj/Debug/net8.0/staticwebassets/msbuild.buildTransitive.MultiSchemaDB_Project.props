@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\MultiSchemaDB_Project.props" />
+</Project>
